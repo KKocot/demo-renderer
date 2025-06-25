@@ -1,16 +1,17 @@
-import { FC, useEffect } from 'react';
-const regex = /^https:\/\/www\.instagram\.com\/(p|reel|reels|[a-zA-Z0-9_.]+)\/(.*?)\/?$/i;
+import { FC, useEffect } from "react";
+const regex =
+  /^https:\/\/www\.instagram\.com\/(p|reel|reels|[a-zA-Z0-9_.]+)\/(.*?)\/?$/i;
 
 export function getInstagramMetadataFromLink(link: string): string | undefined {
   if (!link) return undefined;
 
   const match = link.match(regex);
   if (!match) return undefined;
-  const [_, type, id] = match;
+  const [, type, id] = match;
 
-  if (id.startsWith('p/')) return `https://www.instagram.com/${id}`;
+  if (id.startsWith("p/")) return `https://www.instagram.com/${id}`;
 
-  if (type.includes('reel')) return `https://www.instagram.com/reel/${id}`;
+  if (type.includes("reel")) return `https://www.instagram.com/reel/${id}`;
 
   return match[0];
 }
@@ -18,8 +19,8 @@ export const InstagramEmbedder: FC<{ href: string }> = ({ href }) => {
   useEffect(() => {
     // Load Instagram embed script if not already loaded
     if (!window.instgrm) {
-      const script = document.createElement('script');
-      script.src = '//www.instagram.com/embed.js';
+      const script = document.createElement("script");
+      script.src = "//www.instagram.com/embed.js";
       script.async = true;
       script.onload = () => {
         if (window.instgrm) {
@@ -43,6 +44,10 @@ export const InstagramEmbedder: FC<{ href: string }> = ({ href }) => {
 // Add type declaration for Instagram embed
 declare global {
   interface Window {
-    instgrm?: any;
+    instgrm?: {
+      Embeds: {
+        process(): void;
+      };
+    };
   }
 }

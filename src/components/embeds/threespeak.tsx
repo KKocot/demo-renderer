@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC } from "react";
 
 const main =
   /(?:https?:\/\/(?:(?:3speak\.(?:online|co|tv)\/watch\?v=)|(?:3speak\.(?:online|co|tv)\/embed\?v=)))([A-Za-z0-9_\-\/.]+)(&.*)?/i;
@@ -17,11 +17,7 @@ export const ThreeSpeakEmbed: FC<{ id: string }> = ({ id }) => {
 
   return (
     <div key={`threespeak-${id}`} className="videoWrapper">
-      <iframe
-        title="3Speak embedded player"
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        src={url}
-      />
+      <iframe title="3Speak embedded player" src={url} />
     </div>
   );
 };

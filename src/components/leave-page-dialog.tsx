@@ -21,7 +21,8 @@ export function LeavePageDialog({
         <Separator />
         <div className="flex flex-col gap-8">
           <span>
-            The link you've clicked on will lead you to the following website:
+            The link you&apos;ve clicked on will lead you to the following
+            website:
             <span className="break-all font-bold">{link}</span>
           </span>
           <span>We are just verifying with you that you want to continue.</span>

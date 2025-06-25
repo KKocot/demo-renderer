@@ -1,6 +1,7 @@
 import "highlight.js/styles/github.css";
 import "remark-github-blockquote-alert/alert.css";
 import ReactMarkdown, { Components } from "react-markdown";
+import Image from "next/image";
 
 // remark plugins
 import remarkBreaks from "remark-breaks";
@@ -128,14 +129,19 @@ export default function Renderer({ content }: { content: string }) {
   );
 }
 
+interface LinkComponentProps
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  href?: string;
+  children?: React.ReactNode;
+  className?: string;
+}
+
 const LinkComponent = ({
   href,
   children,
-  download,
-  type,
   className,
   ...props
-}: any) => {
+}: LinkComponentProps) => {
   const url = href ?? "";
   const [isClient, setIsClient] = useState(false);
 
@@ -163,7 +169,15 @@ const LinkComponent = ({
     const imageProxy = getDoubleSize(
       proxifyImageUrl(url, true).replace(/ /g, "%20")
     );
-    return <img src={imageProxy} alt={children?.toString()} />;
+    return (
+      <Image
+        src={imageProxy}
+        alt={children?.toString() || "Image"}
+        width={800}
+        height={600}
+        style={{ width: "auto", height: "auto" }}
+      />
+    );
   }
 
   const twitch = getTwitchMetadataFromLink(url);
@@ -257,21 +271,37 @@ const LinkComponent = ({
     </Link>
   );
 };
+
+interface HeaderProps extends React.HTMLAttributes<HTMLHeadingElement> {
+  children?: React.ReactNode;
+}
+
 const components: Components = {
   ...(["h1", "h2", "h3", "h4", "h5", "h6"] as const).reduce((acc, tag) => {
-    acc[tag] = ({ children, ...props }: any) => (
+    acc[tag] = ({ children, ...props }: HeaderProps) => (
       <LinkHeader id={children?.toString()}>
         {createElement(tag, props, children)}
       </LinkHeader>
     );
     return acc;
   }, {} as Components),
-  img: ({ src, ...props }) => {
-    if (!src || src instanceof Blob) return;
+  img: ({ src, alt, ...props }) => {
+    if (!src || src instanceof Blob) return null;
     const imageProxy = getDoubleSize(
       proxifyImageUrl(src, true).replace(/ /g, "%20")
     );
-    return <img src={imageProxy} {...props} />;
+    return (
+      <Image
+        src={imageProxy}
+        alt={alt || "Image"}
+        // @ts-expect-error - Next.js Image component expects number but we're passing string from markdown
+        width={800}
+        // @ts-expect-error - Next.js Image component expects number but we're passing string from markdown
+        height={600}
+        style={{ width: "auto", height: "auto" }}
+        {...props}
+      />
+    );
   },
   a: LinkComponent,
 };

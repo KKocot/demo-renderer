@@ -41,7 +41,7 @@ export const proxifyImageUrl = (url: string, dimensions: string | boolean) => {
     let dims = dimensions + "/";
     if (typeof dimensions !== "string") {
       dims = proxyList
-        ? // @ts-ignore
+        ? // @ts-expect-error - proxyList.shift() may return undefined but we know it exists from the condition above
           proxyList.shift().match(/([0-9]+x[0-9]+)\//g)[0]
         : NATURAL_SIZE;
     }
