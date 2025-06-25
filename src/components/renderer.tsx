@@ -290,16 +290,7 @@ const components: Components = {
     const imageProxy = getDoubleSize(
       proxifyImageUrl(src, true).replace(/ /g, "%20")
     );
-    return (
-      <img
-        src={imageProxy}
-        alt={alt || "Image"}
-        width={800}
-        height={600}
-        style={{ width: "auto", height: "auto" }}
-        {...props}
-      />
-    );
+    return <img src={imageProxy} alt={alt || "Image"} {...props} />;
   },
   a: LinkComponent,
 };
