@@ -291,12 +291,10 @@ const components: Components = {
       proxifyImageUrl(src, true).replace(/ /g, "%20")
     );
     return (
-      <Image
+      <img
         src={imageProxy}
         alt={alt || "Image"}
-        // @ts-expect-error - Next.js Image component expects number but we're passing string from markdown
         width={800}
-        // @ts-expect-error - Next.js Image component expects number but we're passing string from markdown
         height={600}
         style={{ width: "auto", height: "auto" }}
         {...props}
