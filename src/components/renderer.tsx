@@ -24,7 +24,13 @@ import rehypeMathjax from "rehype-mathjax";
 import rehypeLinkHandler from "./plugins/rehype-link-handler";
 import rehypeSanitize from "rehype-sanitize";
 import LinkHeader from "./link-header";
-import { createElement, useEffect, useState } from "react";
+import {
+  createElement,
+  HTMLAttributes,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react";
 import { getDoubleSize, proxifyImageUrl } from "@/lib/old-profixy";
 import { ExternalLink } from "lucide-react";
 import Link from "next/link";
@@ -322,6 +328,6 @@ const LinkComponent = ({
   );
 };
 
-interface HeaderProps extends React.HTMLAttributes<HTMLHeadingElement> {
-  children?: React.ReactNode;
+interface HeaderProps extends HTMLAttributes<HTMLHeadingElement> {
+  children?: ReactNode;
 }

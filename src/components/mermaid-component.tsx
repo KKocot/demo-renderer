@@ -10,7 +10,6 @@ interface MermaidComponentProps {
 export default function MermaidComponent({ children }: MermaidComponentProps) {
   const [mermaidInitialized, setMermaidInitialized] = useState(false);
   const [svg, setSvg] = useState<string>("");
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
@@ -31,42 +30,52 @@ export default function MermaidComponent({ children }: MermaidComponentProps) {
 
   useEffect(() => {
     if (mermaidInitialized && children) {
-      setLoading(true);
-      setError("");
       const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`;
 
+      // Clear previous states
+      setError("");
+      setSvg("");
+
+      // Clean the content by removing markdown code block wrappers
+      let cleanedContent = children.trim();
+      const lines = cleanedContent.split("\n");
+
+      // Remove first line if it's ```mermaid or ```
+      if (lines[0] && lines[0].trim().match(/^```(?:mermaid)?$/)) {
+        lines.shift();
+      }
+
+      // Remove last line if it's ```
+      if (lines[lines.length - 1] && lines[lines.length - 1].trim() === "```") {
+        lines.pop();
+      }
+
+      cleanedContent = lines.join("\n").trim();
+
+      if (!cleanedContent) {
+        setError("Empty diagram content");
+        return;
+      }
+
       mermaid
-        .render(id, children)
+        .render(id, cleanedContent)
         .then((result) => {
           setSvg(result.svg);
-          setLoading(false);
         })
-        .catch((error: unknown) => {
-          console.error("Mermaid rendering error:", error);
-          setError("Failed to render diagram");
-          setLoading(false);
+        .catch((error) => {
+          console.error("Failed to render mermaid diagram:", error);
+          setError("Invalid Mermaid syntax");
         });
     }
   }, [mermaidInitialized, children]);
 
-  if (loading) {
-    return (
-      <pre className="p-4 rounded">
-        <code>{children}</code>
-      </pre>
-    );
-  }
-
   if (error) {
     return (
-      <div>
-        <p>Error rendering Mermaid diagram: {error}</p>
-        <pre className="mt-2 text-sm">
-          <code>{children}</code>
-        </pre>
+      <div className="p-4 border border-red-300 bg-red-50 text-red-700 rounded">
+        <strong>Mermaid Error:</strong> {error}
       </div>
     );
   }
 
-  return <div dangerouslySetInnerHTML={{ __html: svg }} />;
+  return svg ? <div dangerouslySetInnerHTML={{ __html: svg }} /> : null;
 }

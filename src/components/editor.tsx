@@ -47,6 +47,7 @@ const Editor = ({
         "unorderedList",
         "orderedList",
         "task",
+        "mermaid",
         "-",
         "codeRow",
         "code",
