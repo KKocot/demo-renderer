@@ -40,11 +40,49 @@ import {
 } from "./embeds/threespeak";
 import { getXMetadataFromLink, TwitterEmbedder } from "./embeds/twitter-x";
 import { getYoutubeaFromLink, YoutubeEmbed } from "./embeds/youtube";
+import MermaidComponent from "./mermaid-component";
 
 export default function Renderer({ content }: { content: string }) {
+  const components: Components = {
+    ...(["h1", "h2", "h3", "h4", "h5", "h6"] as const).reduce((acc, tag) => {
+      acc[tag] = ({ children, ...props }: HeaderProps) => (
+        <LinkHeader id={children?.toString()}>
+          {createElement(tag, props, children)}
+        </LinkHeader>
+      );
+      return acc;
+    }, {} as Components),
+    img: ({ src, alt, ...props }) => {
+      if (!src || src instanceof Blob) return null;
+      const imageProxy = getDoubleSize(
+        proxifyImageUrl(src, true).replace(/ /g, "%20")
+      );
+      return <img src={imageProxy} alt={alt || "Image"} {...props} />;
+    },
+    code: ({ className, children, ...props }) => {
+      const match = /language-(\w+)/.exec(className || "");
+      const language = match ? match[1] : "";
+
+      if (language === "mermaid") {
+        return (
+          <MermaidComponent>
+            {String(children).replace(/\n$/, "")}
+          </MermaidComponent>
+        );
+      }
+
+      return (
+        <code className={className} {...props}>
+          {children}
+        </code>
+      );
+    },
+    a: LinkComponent,
+  };
+
   return (
     <>
-      <div className="w-full min-w-full self-center break-words p-2 font-source text-[16.5px] prose-h1:text-[26.4px] prose-h2:text-[23.1px] prose-h3:text-[19.8px] prose-h4:text-[18.1px] sm:text-[17.6px] sm:prose-h1:text-[28px] sm:prose-h2:text-[24.7px] sm:prose-h3:text-[22.1px] sm:prose-h4:text-[19.4px] lg:text-[19.2px] lg:prose-h1:text-[30.7px] lg:prose-h2:text-[28.9px] lg:prose-h3:text-[23px] lg:prose-h4:text-[21.1px] prose-p:mb-6 prose-p:mt-0 prose-img:cursor-pointer prose max-w-none dark:prose-invert">
+      <div className="w-full relative min-w-full self-center break-words p-2 font-source text-[16.5px] prose-h1:text-[26.4px] prose-h2:text-[23.1px] prose-h3:text-[19.8px] prose-h4:text-[18.1px] sm:text-[17.6px] sm:prose-h1:text-[28px] sm:prose-h2:text-[24.7px] sm:prose-h3:text-[22.1px] sm:prose-h4:text-[19.4px] lg:text-[19.2px] lg:prose-h1:text-[30.7px] lg:prose-h2:text-[28.9px] lg:prose-h3:text-[23px] lg:prose-h4:text-[21.1px] prose-p:mb-6 prose-p:mt-0 prose-img:cursor-pointer prose max-w-none dark:prose-invert">
         <ReactMarkdown
           components={components}
           remarkPlugins={[
@@ -117,6 +155,18 @@ export default function Renderer({ content }: { content: string }) {
                   "br",
                   "input",
                   "center",
+                  "svg",
+                  "g",
+                  "path",
+                  "rect",
+                  "circle",
+                  "text",
+                  "line",
+                  "polygon",
+                  "polyline",
+                  "defs",
+                  "marker",
+                  "style",
                 ],
               },
             ],
@@ -275,22 +325,3 @@ const LinkComponent = ({
 interface HeaderProps extends React.HTMLAttributes<HTMLHeadingElement> {
   children?: React.ReactNode;
 }
-
-const components: Components = {
-  ...(["h1", "h2", "h3", "h4", "h5", "h6"] as const).reduce((acc, tag) => {
-    acc[tag] = ({ children, ...props }: HeaderProps) => (
-      <LinkHeader id={children?.toString()}>
-        {createElement(tag, props, children)}
-      </LinkHeader>
-    );
-    return acc;
-  }, {} as Components),
-  img: ({ src, alt, ...props }) => {
-    if (!src || src instanceof Blob) return null;
-    const imageProxy = getDoubleSize(
-      proxifyImageUrl(src, true).replace(/ /g, "%20")
-    );
-    return <img src={imageProxy} alt={alt || "Image"} {...props} />;
-  },
-  a: LinkComponent,
-};

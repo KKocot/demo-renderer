@@ -123,3 +123,91 @@ $$
 
 ![image](https://images.hive.blog/DQmfYWmNCseteSrWRAY4Wo35bCEivQZgrPqG16HwjeVSCP3/81b2d8c807e643b5a1766c6f8d5c0f68.webp)
 ![image](https://images.hive.blog/DQma3iMm2eqK83hiiY9PRrG3dvtXgrANSgEuUbeXLXb4biu/image.png)
+
+# Couple Relationship Graphs – Mermaid Examples
+
+## Simple Relationship Flow (Basic Flowchart)
+
+```mermaid
+graph TD
+    A(Boy meets Girl) --> B(They start dating)
+    B --> C(Fall in love)
+    C --> D(Engagement)
+    D --> E(Marriage)
+```
+
+---
+
+## Compatibility Comparison (Decision Tree)
+
+```mermaid
+graph TD
+    A[Do they like the same hobbies?] -->|Yes| B[Good Compatibility]
+    A -->|No| C[Can they respect differences?]
+    C -->|Yes| B
+    C -->|No| D[Potential Issues]
+```
+
+---
+
+## Timeline of Relationship (Gantt Style)
+
+```mermaid
+gantt
+    title Relationship Timeline
+    dateFormat  YYYY-MM-DD
+    section Milestones
+    First Date      :a1, 2022-05-01, 1d
+    Started Dating  :a2, 2022-05-15, 1d
+    First Trip      :a3, 2022-08-10, 3d
+    Moved In        :a4, 2023-01-01, 1d
+    Engagement      :a5, 2024-02-14, 1d
+```
+
+---
+
+## Love Story Network (Complex Graph)
+
+```mermaid
+graph LR
+    Alice((Alice)) -->|Meets| Bob((Bob))
+    Bob -->|Falls for| Alice
+    Alice -->|Introduces| Carla((Carla))
+    Bob --> Carla
+    Carla -->|Gives advice| Alice
+    Bob -->|Buys gift for| Alice
+    Alice -->|Plans surprise for| Bob
+    Carla -->|Also likes| Bob
+    subgraph Complications
+        Carla -->|Secret feelings| Bob
+    end
+```
+
+---
+
+## Life Decisions as a Couple (Large Flow)
+
+```mermaid
+graph TD
+    Start((Start Relationship))
+    Start --> Love(Fall in Love)
+    Love --> MoveIn(Move in Together)
+    MoveIn -->|Happy| Travel(Travel Together)
+    MoveIn -->|Arguments| Communicate(Communication)
+    Communicate -->|Successful| Travel
+    Communicate -->|Unresolved| Breakup1(Breakup?)
+
+    Travel --> Goals(Discuss Future Goals)
+    Goals -->|Same Goals| Engage(Engagement)
+    Goals -->|Different Goals| Conflict(Major Conflict)
+
+    Engage --> Wedding(Plan Wedding)
+    Wedding --> Married(Married Life)
+    Married --> Kids(Talk About Kids)
+    Kids -->|Yes| Baby1(Baby Born)
+    Kids -->|No| Freedom(Enjoy Freedom)
+
+    Conflict --> Breakup2(Breakup)
+    Breakup1 --> Start
+    Breakup2 --> Start
+```
