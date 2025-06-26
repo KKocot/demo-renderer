@@ -127,6 +127,15 @@ export default function Renderer({ content }: { content: string }) {
                   thead: ["style"],
                   tbody: ["style"],
                   tr: ["style"],
+                  svg: [
+                    "width",
+                    "height",
+                    "viewBox",
+                    "xmlns",
+                    "class",
+                    "aria-hidden",
+                  ],
+                  path: ["d"],
                 },
                 tagNames: [
                   "span",
