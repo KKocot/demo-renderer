@@ -47,6 +47,7 @@ import {
 import { getXMetadataFromLink, TwitterEmbedder } from "./embeds/twitter-x";
 import { getYoutubeaFromLink, YoutubeEmbed } from "./embeds/youtube";
 import MermaidComponent from "./mermaid-component";
+import { cn } from "@/lib/utils";
 
 export default function Renderer({ content }: { content: string }) {
   const components: Components = {
@@ -312,9 +313,9 @@ const LinkComponent = ({
   if (className?.includes("link-external")) {
     if (className?.includes("safe-external-link")) {
       return (
-        <Link href={url} target="_blank">
+        <Link href={url} target="_blank" className="text-destructive">
           <span>{children}</span>
-          <ExternalLink className="inline h-4 w-4 cursor-pointer pl-1 text-destructive" />
+          <ExternalLink className="inline h-4 w-4 cursor-pointer pl-1" />
         </Link>
       );
     }
@@ -331,7 +332,7 @@ const LinkComponent = ({
   }
 
   return (
-    <Link href={url} {...props}>
+    <Link href={url} {...props} className={cn(className, "text-destructive")}>
       {children}
     </Link>
   );
