@@ -27,6 +27,7 @@ export default function MermaidComponent({ children }: MermaidComponentProps) {
       .render(idRef.current, children)
       .then(({ svg }) => {
         if (active && ref.current) {
+          ref.current.className = "flex justify-center";
           ref.current.innerHTML = svg;
         }
       })
